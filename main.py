@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-	return 'This is the home page'
+	return 'This is the home page (in the other branch)'
 
 @app.route('/<name>')
 def welcome(name=None):
