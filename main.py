@@ -8,7 +8,7 @@ def home():
 
 @app.route('/<name>')
 def welcome(name=None):
-	return 'Welcome {}, nice to see you!'.format(name)
+	return 'Welcome {}, BAD to see you!'.format(name)
 
 if __name__ == '__main__':
 	app.run()
