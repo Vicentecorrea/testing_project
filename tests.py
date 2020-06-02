@@ -2,10 +2,13 @@ import unittest
 import home_tests
 
 def main():
-	print("Running test...")
+	print("Running tests...")
 	home_tester = unittest.TestLoader().loadTestsFromModule(home_tests)
-	unittest.TextTestRunner(verbosity=2).run(home_tester)
-	print("Done testing")
+	results = unittest.TextTestRunner(verbosity=2).run(home_tester)
+	if len(results.failures) > 0:
+		print("Error, {} tests faildes".format(len(results.failures)))
+		return -1
+	print("No test failed")
 
 if __name__ == '__main__':
 	main()
