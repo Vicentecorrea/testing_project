@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import json
 
 app = Flask(__name__)
 
@@ -20,6 +21,12 @@ def home():
 @app.route('/<name>')
 def welcome(name=None):
 	return jsonify(users)
+
+@app.route('/products')
+def get_products():
+	with open("products.json") as json_file:
+		products = json.load(json_file)
+		return jsonify(products)
 
 if __name__ == '__main__':
 	app.run()
