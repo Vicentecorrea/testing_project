@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <style>
+            img {
+                display: block;
+                max-width:800px;
+                max-height:400px;
+                width: auto;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="/"><button type="button">Volver al catálogo de productos</button></a>
+        </div>
+        <div style="border-style: solid; border-width: 1px; margin-bottom: 5px; padding-left: 5px; padding-bottom: 5px;">
+            <h1>{{ product["name"] }}</h1>
+            <h3>${{ product["price"] }}</h3>
+            <img src="{{ product['image'] }}" alt="{{ product['name'] }}">
+            <h3>Estrellas: {{ product["mean_score"] }} ({{ product["score_amount"] }} opiniones)</h3>
+        </div>
+        <form action="/rate_product", method="POST">
+            {% for i in range(1, 6) %}
+                <input type="radio" id="{{ i }}" name="score" value={{ i }}>
+                <label for="{{ i }}">{{ i }}</label><br>
+            {% endfor %}
+            <input type="hidden" name="product_id" value="{{ product['id'] }}">
+            <input type="submit" value="votar">
+          </form> 
+        {% if len(comments) == 0 %}
+            <h3>No hay comentarios</h3>
+        {% else %}
+            <h1>Comentarios</h1>
+            {% for comment in comments %}
+                <div style="border-style: solid; margin-bottom: 5px; padding-left: 5px; padding-bottom: 5px;">
+                    <h3>{{ comment["author"] }}</h3>
+                    <p><i>{{ comment["date"] }}</i></p>
+                    <p>{{ comment["text"] }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <form action="/create_comment" method="POST">
+            <label for="author">Autor:</label><br>
+            <input type="text" id="author" name="author" value=""><br>
+            <label for="text">Comentario:</label><br>
+            <input type="text" id="text" name="text" value=""><br><br>
+            <input type="hidden" name="product_id" value="{{ product['id'] }}">
+            <input type="submit" value="comentar">
+        </form>
+    </body>
+</html>
