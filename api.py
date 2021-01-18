@@ -88,8 +88,6 @@ def save_ids():
 		ids_file.write(id + "," + str(ids[id]) + "\n")
 	
 def get_ids():
-	global ids
-	ids = {}
 	ids_file = open("ids.txt")
 	for line in ids_file:
 		line_list = line.strip().split(',')
@@ -97,6 +95,7 @@ def get_ids():
 			ids[line_list[0]] = int(line_list[1])
 
 if __name__ == '__main__':
+	ids = {}
 	get_ids()
 	app.run()
 	# app.run(port=8080)
