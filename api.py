@@ -93,8 +93,10 @@ def get_ids():
 	ids_file = open("ids.txt")
 	for line in ids_file:
 		line_list = line.strip().split(',')
-		ids[line_list[0]] = int(line_list[1])
+		if len(line_list) == 2:
+			ids[line_list[0]] = int(line_list[1])
 
 if __name__ == '__main__':
 	get_ids()
-	app.run(port=8080)
+	app.run()
+	# app.run(port=8080)
