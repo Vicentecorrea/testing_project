@@ -15,9 +15,8 @@ def get_comments(product_id=None):
 
 @app.route('/products', methods = ["GET"])
 def get_products():
-	with open("products.json") as json_file:
-		products = json.load(json_file)
-		return jsonify(products)
+	products = get_products_dic()
+	return jsonify(products)
 
 @app.route('/products/<product_id>', methods = ["GET"])
 def get_product(product_id=None):
@@ -32,6 +31,7 @@ def get_product(product_id=None):
 
 @app.route('/create_product', methods = ["POST"])
 def create_product():
+	ids = get_ids_dic()
 	ids["last_product_id"] += 1
 	# cambiar esto
 	request_data = request.get_json()
@@ -41,7 +41,7 @@ def create_product():
 	score = []
 	new_product = {"id": ids["last_product_id"], "name": name, 
 		"price": price, "image": image, "score": score}
-	save_ids()
+	save_ids(ids)
 	print("\n\n", new_product, "\n\n")
 	with open("products.json", "r") as json_file:
 		products = json.load(json_file)
@@ -52,6 +52,7 @@ def create_product():
 
 @app.route('/create_comment', methods = ["POST"])
 def create_comment():
+	ids = get_ids_dic()
 	ids["last_comment_id"] += 1
 	request_data = request.get_json()
 	author = request_data['author']
@@ -60,7 +61,7 @@ def create_comment():
 	date = request_data['date']
 	new_comment = {"id": ids["last_comment_id"],  "product_id": product_id, 
 		"author": author, "text": text, "date": date}
-	save_ids()
+	save_ids(ids)
 	print("\n\n", new_comment, "\n\n")
 	with open("comments.json", "r") as json_file:
 		comments = json.load(json_file)
@@ -74,28 +75,27 @@ def rate_product():
 	request_data = request.get_json()
 	product_id = request_data["product_id"]
 	score = request_data["score"]
-	with open("products.json", "r") as json_file:
-		products = json.load(json_file)
-		product_to_rate = next(c for c in products if c["id"] == product_id)
-		product_to_rate["score"].append(score)
+	products = get_products_dic()
+	product_to_rate = next(c for c in products if c["id"] == product_id)
+	product_to_rate["score"].append(score)
 	with open("products.json", "w") as json_file:
 		json.dump(products, json_file)
 	return product_to_rate
 
-def save_ids():
-	ids_file = open("ids.txt", "w")
-	for id in ids:
-		ids_file.write(id + "," + str(ids[id]) + "\n")
+def get_products_dic():
+	with open("products.json", "r") as json_file:
+		products = json.load(json_file)
+	return products
+
+def save_ids(ids):
+	with open("ids.json", "w") as json_file:
+		json.dump(ids, json_file)
 	
-def get_ids():
-	ids_file = open("ids.txt")
-	for line in ids_file:
-		line_list = line.strip().split(',')
-		if len(line_list) == 2:
-			ids[line_list[0]] = int(line_list[1])
+def get_ids_dic():
+	with open("ids.json", "r") as json_file:
+		ids = json.load(json_file)
+	return ids
 
 if __name__ == '__main__':
-	ids = {}
-	get_ids()
 	app.run()
 	# app.run(port=8080)

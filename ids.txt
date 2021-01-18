@@ -1,2 +1,0 @@
-last_product_id,5
-last_comment_id,11
