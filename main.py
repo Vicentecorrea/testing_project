@@ -11,7 +11,6 @@ api_url = "https://api-python-classes.herokuapp.com"
 def home():
 	products_request = requests.get("{}/products".format(api_url))
 	products = products_request.json()
-	print('probando github.dev')
 	return render_template('home.html', products=products)
 
 @app.route('/<product_id>', methods = ["GET"])
